@@ -19,6 +19,7 @@ public class AbstractProcessor {
     public static final String INDEX_PT = "index,pt";
     public static final String INDEX_EN = "index,en";
     public static final String INDEX_ES = "index,es";
+    public static final String INDEX_FR = "index,fr";
 
     private Document document;
     private String name;
@@ -42,6 +43,9 @@ public class AbstractProcessor {
                     stringBuffer.append(new NodeProcessor(BODY_MAP).processRootNode(indexNode));
                 });
                 getNodeByClass(contetNode, INDEX_ES).ifPresent(indexNode ->{
+                    stringBuffer.append(new NodeProcessor(BODY_MAP).processRootNode(indexNode));
+                });
+                getNodeByClass(contetNode, INDEX_FR).ifPresent(indexNode ->{
                     stringBuffer.append(new NodeProcessor(BODY_MAP).processRootNode(indexNode));
                 });
             });

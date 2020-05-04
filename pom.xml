@@ -16,7 +16,7 @@
 		
 		<springboot-version>2.2.1.RELEASE</springboot-version>
 
-		<jackson.version>2.9.7</jackson.version>
+		<jackson.version>2.11.0</jackson.version>
 
 		<jsoup.version>1.10.2</jsoup.version>
 	</properties>
