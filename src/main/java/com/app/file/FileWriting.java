@@ -25,7 +25,7 @@ public class FileWriting {
      * @param fileName: Destiny file
      * @param message: String to write on the destiny file
      */
-    public static void writeUsingFileWriter(String fileName, String message) {
+    public static void writeStringIntoText(String fileName, String message) {
         FileWriter w = null;
         try {
             w = new FileWriter(fileName);

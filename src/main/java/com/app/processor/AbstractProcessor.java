@@ -1,16 +1,24 @@
 package com.app.processor;
 
-import com.app.file.FileWriting;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Node;
 
 import java.util.Optional;
 
+import static com.app.file.FileWriting.writeStringIntoText;
 import static com.app.utils.Constants.BODY_MAP;
 import static com.app.utils.Constants.RESOURCES_PATH;
 import static com.app.utils.Constants.TXT_EXTENSION;
 
 public class AbstractProcessor {
+
+    public static final String CONTAINER_TAG = "container";
+
+    public static final String CONTENT_TAG = "content";
+
+    public static final String INDEX_PT = "index,pt";
+    public static final String INDEX_EN = "index,en";
+    public static final String INDEX_ES = "index,es";
 
     private Document document;
     private String name;
@@ -25,17 +33,22 @@ public class AbstractProcessor {
     public void process(){
         StringBuffer stringBuffer = new StringBuffer();
 
-        Node node = document.body().childNode(0);
-
-        getNodeByClass(node,"content").ifPresent(contetNode -> {
-            getNodeByClass(contetNode, "index,en").ifPresent(indexNode ->{
-                NodeProcessor bodyProcessor = new NodeProcessor(BODY_MAP);
-                stringBuffer.append(bodyProcessor.processRootNode(indexNode));
+        getNodeByClass(document.body(), CONTAINER_TAG).ifPresent(containerNode ->{
+            getNodeByClass(containerNode, CONTENT_TAG).ifPresent(contetNode -> {
+                getNodeByClass(contetNode, INDEX_PT).ifPresent(indexNode ->{
+                    stringBuffer.append(new NodeProcessor(BODY_MAP).processRootNode(indexNode));
+                });
+                getNodeByClass(contetNode, INDEX_EN).ifPresent(indexNode ->{
+                    stringBuffer.append(new NodeProcessor(BODY_MAP).processRootNode(indexNode));
+                });
+                getNodeByClass(contetNode, INDEX_ES).ifPresent(indexNode ->{
+                    stringBuffer.append(new NodeProcessor(BODY_MAP).processRootNode(indexNode));
+                });
             });
         });
 
         String fileName = RESOURCES_PATH+folder+name+TXT_EXTENSION;
-        FileWriting.writeUsingFileWriter(fileName, stringBuffer.toString());
+        writeStringIntoText(fileName, stringBuffer.toString());
     }
 
     private Optional<Node> getNodeByClass(Node rootNode, String className){

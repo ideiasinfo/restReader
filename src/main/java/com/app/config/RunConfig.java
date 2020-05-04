@@ -32,10 +32,9 @@ public class RunConfig {
     public CommandLineRunner run(){
         return args -> {
 
-
             //2020
             createFolderInDisk("2020");
-            IntStream.range(1, 4).forEach(mes -> {
+            IntStream.range(1, 5).forEach(mes -> {
                 connectionManager
                         .getByUrl(BASE_URL+"202000"+mesToString(mes)+"&lng=pt&nrm=iso")
                         .ifPresent(document -> monthlyDocumentProcessor.process(document,"2020/"+mes));

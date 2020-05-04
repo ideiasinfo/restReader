@@ -7,6 +7,7 @@ import org.jsoup.nodes.Node;
 import java.util.Optional;
 import java.util.function.Function;
 
+import static com.app.file.FileWriting.writeStringIntoText;
 import static com.app.utils.Constants.BACK_MAP;
 import static com.app.utils.Constants.BODY_MAP;
 import static com.app.utils.Constants.EMPTY;
@@ -72,7 +73,7 @@ public class ArticleProcessor {
                 }));
 
         String fileName = RESOURCES_PATH+folder+name+TXT_EXTENSION;
-        FileWriting.writeUsingFileWriter(fileName, stringBuffer.toString());
+        writeStringIntoText(fileName, stringBuffer.toString());
     }
 
     private String processIfExistElementId(String elementId, NodeProcessor processor){
