@@ -1,36 +1,46 @@
 package com.app.file;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import static com.app.utils.Constants.RESOURCES_PATH;
 
 public class FileWriting {
 
-    public static void createFolder(String folder){
-        File file = new File(RESOURCES_PATH+folder);
-        file.mkdir();
+    /**
+     * createFolder, create the folder to create the files later
+     *
+     * @param folder: Destiny file
+     */
+    public static void createFolderInDisk(String folder){
+        new File(RESOURCES_PATH+folder).mkdir();
     }
 
     /**
-     * Use FileWriter when number of write operations are less
-     * @param data
+     * Writes on the file named as the first parameter the String which gets as second parameter.
+     *
+     * @param fileName: Destiny file
+     * @param message: String to write on the destiny file
      */
-    public static void writeUsingFileWriter(String fileName, String data) {
-        File file = new File(fileName);
-        FileWriter fr = null;
+    public static void writeUsingFileWriter(String fileName, String message) {
+        FileWriter w = null;
         try {
-            fr = new FileWriter(file);
-            fr.write(data);
+            w = new FileWriter(fileName);
         } catch (IOException e) {
             e.printStackTrace();
-        }finally{
-            try {
-                fr.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        }
+        BufferedWriter bw = new BufferedWriter(w);
+        PrintWriter wr = new PrintWriter(bw);
+
+        try {
+            wr.write(message);
+            wr.close();
+            bw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

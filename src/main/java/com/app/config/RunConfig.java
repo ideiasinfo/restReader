@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.stream.IntStream;
 
+import static com.app.file.FileWriting.createFolderInDisk;
 import static com.app.utils.Constants.BASE_URL;
 
 @Configuration
@@ -31,22 +32,18 @@ public class RunConfig {
     public CommandLineRunner run(){
         return args -> {
 
-            int mes = 4;
-            connectionManager
-                    .getByUrl(BASE_URL+"201500"+mesToString(mes)+"&lng=pt&nrm=iso")
-                    .ifPresent(document -> monthlyDocumentProcessor.process(document,"2015/"+mes));
 
-            /*
             //2020
-            FileWriting.createFolder("2020");
+            createFolderInDisk("2020");
             IntStream.range(1, 4).forEach(mes -> {
                 connectionManager
                         .getByUrl(BASE_URL+"202000"+mesToString(mes)+"&lng=pt&nrm=iso")
                         .ifPresent(document -> monthlyDocumentProcessor.process(document,"2020/"+mes));
             });
 
+            /*
             IntStream.range(2012, 2019).forEach(ano ->{
-                FileWriting.createFolder(ano+"");
+                FileWriting.createFolderInDisk(ano+"");
                 IntStream.range(1, 12).forEach(mes -> {
                     connectionManager
                             .getByUrl(BASE_URL+"201900"+mesToString(mes)+"&lng=pt&nrm=iso")

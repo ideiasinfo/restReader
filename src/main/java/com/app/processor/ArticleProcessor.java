@@ -3,13 +3,16 @@ package com.app.processor;
 import com.app.file.FileWriting;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Node;
-import org.jsoup.select.Elements;
 
-import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 
-import static com.app.utils.Constants.*;
+import static com.app.utils.Constants.BACK_MAP;
+import static com.app.utils.Constants.BODY_MAP;
+import static com.app.utils.Constants.EMPTY;
+import static com.app.utils.Constants.FRONT_MAP;
+import static com.app.utils.Constants.LINE_SEPARATOR;
+import static com.app.utils.Constants.RESOURCES_PATH;
 import static com.app.utils.Constants.TXT_EXTENSION;
 
 public class ArticleProcessor {
@@ -25,10 +28,6 @@ public class ArticleProcessor {
     public static final String EDITORIAL_FRONT_BR = "S01-front";
     public static final String EDITORIAL_BODY_BR = "S01-body";
     public static final String EDITORIAL_BACK_BR = "S01-back";
-
-    public static final Map<String,String> FRONT_MAP = Map.of("span",SPACE,"p",SPACE,"a", LINE_SEPARATOR, "sup", SPACE);
-    public static final Map<String,String> BODY_MAP = Map.of("span",SPACE,"p",SPACE,"a", SPACE, "em", SPACE);
-    public static final Map<String,String> BACK_MAP = Map.of("span",SPACE,"p",SPACE,"em", SPACE);
 
     private Document document;
     private String name;
@@ -48,8 +47,6 @@ public class ArticleProcessor {
         stringBuffer.append(processIfExistElementId(ARTICLE_FRONT_US, frontProcessor));
         stringBuffer.append(processIfExistElementId(EDITORIAL_FRONT_BR, frontProcessor));
         stringBuffer.append(LINE_SEPARATOR);
-
-        document.body();
 
         NodeProcessor bodyProcessor = new NodeProcessor(BODY_MAP);
         stringBuffer.append(processIfExistElementId(ARTICLE_BODY_BR, bodyProcessor));
