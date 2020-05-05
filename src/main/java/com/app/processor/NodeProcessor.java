@@ -35,7 +35,6 @@ public class NodeProcessor{
 
     private String processNode(Node node, Function<Node,String> runChild){
         return node.childNodes().stream()
-                .filter(this::filterNonProcessingElements)
                 .map(runChild)
                 .collect(Collectors.joining());
     }
@@ -50,10 +49,6 @@ public class NodeProcessor{
         String param = tagMapping.get(getParentTag(textNode));
         if(param != null) return textNode.text() + param;
         return EMPTY;
-    }
-
-    private boolean filterNonProcessingElements(Node node){
-        return !node.attr("class").equals("categoria");
     }
 
     private String getParentTag(Node node){

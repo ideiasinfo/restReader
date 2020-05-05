@@ -27,4 +27,6 @@ public class Constants {
     public static final Map<String,String> BODY_MAP = Map.of("span",SPACE,"p",SPACE,"a", SPACE, "em", SPACE);
     public static final Map<String,String> BACK_MAP = Map.of("span",SPACE,"p",SPACE,"em", SPACE);
 
+    public static final Map<String,String> OLD_BODY_MAP = Map.of("span",SPACE,"p",SPACE,"a", SPACE, "em", SPACE, "font", SPACE, "b", SPACE);
+
 }

@@ -8,13 +8,7 @@ import java.util.Optional;
 import java.util.function.Function;
 
 import static com.app.file.FileWriting.writeStringIntoText;
-import static com.app.utils.Constants.BACK_MAP;
-import static com.app.utils.Constants.BODY_MAP;
-import static com.app.utils.Constants.EMPTY;
-import static com.app.utils.Constants.FRONT_MAP;
-import static com.app.utils.Constants.LINE_SEPARATOR;
-import static com.app.utils.Constants.RESOURCES_PATH;
-import static com.app.utils.Constants.TXT_EXTENSION;
+import static com.app.utils.Constants.*;
 
 public class ArticleProcessor {
 
@@ -30,6 +24,15 @@ public class ArticleProcessor {
     public static final String EDITORIAL_BODY_BR = "S01-body";
     public static final String EDITORIAL_BACK_BR = "S01-back";
 
+    public static final String CONTAINER_TAG = "container";
+
+    public static final String CONTENT_TAG = "content";
+
+    public static final String INDEX_PT = "index,pt";
+    public static final String INDEX_EN = "index,en";
+    public static final String INDEX_ES = "index,es";
+    public static final String INDEX_FR = "index,fr";
+
     private Document document;
     private String name;
     private String folder;
@@ -42,6 +45,23 @@ public class ArticleProcessor {
 
     public void process(){
         StringBuffer stringBuffer = new StringBuffer();
+
+        getNodeByClass(document.body(), CONTAINER_TAG).ifPresent(containerNode ->{
+            getNodeByClass(containerNode, CONTENT_TAG).ifPresent(contentNode -> {
+                getNodeByClass(contentNode, INDEX_PT).ifPresent(indexNode ->{
+                    stringBuffer.append(new NodeProcessor(OLD_BODY_MAP).processRootNode(indexNode));
+                });
+                getNodeByClass(contentNode, INDEX_EN).ifPresent(indexNode ->{
+                    stringBuffer.append(new NodeProcessor(OLD_BODY_MAP).processRootNode(indexNode));
+                });
+                getNodeByClass(contentNode, INDEX_ES).ifPresent(indexNode ->{
+                    stringBuffer.append(new NodeProcessor(OLD_BODY_MAP).processRootNode(indexNode));
+                });
+                getNodeByClass(contentNode, INDEX_FR).ifPresent(indexNode ->{
+                    stringBuffer.append(new NodeProcessor(OLD_BODY_MAP).processRootNode(indexNode));
+                });
+            });
+        });
 
         NodeProcessor frontProcessor = new NodeProcessor(FRONT_MAP);
         stringBuffer.append(processIfExistElementId(ARTICLE_FRONT_BR, frontProcessor));
@@ -56,21 +76,18 @@ public class ArticleProcessor {
         stringBuffer.append(LINE_SEPARATOR);
 
         NodeProcessor backProcessor = new NodeProcessor(BACK_MAP);
-        stringBuffer.append(processIfExistElementId(ARTICLE_BACK_BR,
-                node -> {
-                    if(!node.childNodes().isEmpty()) return backProcessor.processRootNode(node.childNode(0));
-                    else return EMPTY;
-                }));
-        stringBuffer.append(processIfExistElementId(ARTICLE_BACK_US,
-                node -> {
-                    if(!node.childNodes().isEmpty()) return backProcessor.processRootNode(node.childNode(0));
-                    else return EMPTY;
-                }));
-        stringBuffer.append(processIfExistElementId(EDITORIAL_BACK_BR,
-                node -> {
-                    if(!node.childNodes().isEmpty()) return backProcessor.processRootNode(node.childNode(0));
-                    else return EMPTY;
-                }));
+        stringBuffer.append(processIfExistElementId(ARTICLE_BACK_BR, node -> {
+            if(!node.childNodes().isEmpty()) return backProcessor.processRootNode(node.childNode(0));
+            else return EMPTY;
+        }));
+        stringBuffer.append(processIfExistElementId(ARTICLE_BACK_US, node -> {
+            if(!node.childNodes().isEmpty()) return backProcessor.processRootNode(node.childNode(0));
+            else return EMPTY;
+        }));
+        stringBuffer.append(processIfExistElementId(EDITORIAL_BACK_BR,node -> {
+            if(!node.childNodes().isEmpty()) return backProcessor.processRootNode(node.childNode(0));
+            else return EMPTY;
+        }));
 
         String fileName = RESOURCES_PATH+folder+name+TXT_EXTENSION;
         writeStringIntoText(fileName, stringBuffer.toString());
@@ -88,6 +105,13 @@ public class ArticleProcessor {
 
     private Optional<Node> getNodeByElementId(String elementId){
         return Optional.ofNullable(document.getElementById(elementId));
+    }
+
+    private Optional<Node> getNodeByClass(Node rootNode, String className){
+        return rootNode.childNodes()
+                .stream()
+                .filter(childNode -> childNode.attr("class").equals(className))
+                .findFirst();
     }
 
 }
